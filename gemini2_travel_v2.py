@@ -23,6 +23,22 @@ from serpapi import GoogleSearch
 from crewai import Agent, Task, Crew, Process, LLM
 import uvicorn
 
+# --- Chroma / SQLite fix for Streamlit Cloud --------------------------
+import sys
+try:
+    # pysqlite3 ships its own up-to-date SQLite (≥3.42)
+    import pysqlite3 as sqlite3
+    sys.modules["sqlite3"] = sqlite3       # make every downstream import see it
+except ImportError:
+    # falls back to stdlib sqlite3 (local dev where it’s new enough)
+    pass
+# ---------------------------------------------------------------------
+
+# …then the rest of your normal imports …
+import os, asyncio, logging
+# keep the rest of gemini2_travel_v2.py unchanged
+
+
 # Load local .env if present (ignored on Streamlit Cloud)
 load_dotenv()
 
